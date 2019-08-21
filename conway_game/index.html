@@ -43,10 +43,10 @@
     }
 
     .control {
-      width: 50px;
-      height: 50px;
+      margin: 0 10px;
+      padding: 2px;
+      height: 40px;
       font-size: 18px;
-      margin: 0 10px
     }
 
   </style>
@@ -65,13 +65,14 @@
     function createMatrix(width, height) {
       const arr = new Array(height).fill(0)
       for (let i = 0; i < height; i++) {
-        arr[i] = new Array(width).fill(0).map(it => Math.random() > 0.8 ? 1 : 0)
+        arr[i] = new Array(width).fill(0).map(it => Math.random() > 0.75 ? 1 : 0)
       }
       return arr
     }
 
     const Game = new ConwayGame(wrap, CONWAYPLAIN, {
-      autoPlay: true
+      autoPlay: true,
+      duration: 800,
     })
 
   </script>
