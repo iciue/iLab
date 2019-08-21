@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Conway’s Game of Life</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .conway-wrap {
+      margin: 100px auto;
+      width: 600px;
+      outline: 1px solid;
+    }
+
+    .conway-board {
+      background: while;
+      width: 600px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .conway-item {
+      width: 20px;
+      height: 20px;
+      border-radius: 100%;
+      margin: 5px;
+    }
+
+    .conway-item.dead {
+      background: #666666;
+      opacity: .3;
+    }
+
+    .conway-item.life {
+      background: red
+    }
+
+    .control {
+      width: 50px;
+      height: 50px;
+      font-size: 18px;
+      margin: 0 10px
+    }
+
+  </style>
+</head>
+
+<body>
+  <section class="conway-wrap">
+
+  </section>
+
+  <script src="./conway_game.js"></script>
+  <script>
+    const CONWAYPLAIN = createMatrix(20, 15)
+    const wrap = document.querySelector('section')
+
+    function createMatrix(width, height) {
+      const arr = new Array(height).fill(0)
+      for (let i = 0; i < height; i++) {
+        arr[i] = new Array(width).fill(0).map(it => Math.random() > 0.8 ? 1 : 0)
+      }
+      return arr
+    }
+
+    const Game = new ConwayGame(wrap, CONWAYPLAIN, {
+      autoPlay: true
+    })
+
+  </script>
+</body>
+
+</html>
