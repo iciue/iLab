@@ -82,7 +82,7 @@
       border-radius: 100%;
     }
 
-    .todo-item.completed .controller::before {
+    .todo-item.completed .controller.toggle::before {
       content: '✔️';
       position: absolute;
       top: 2px;
@@ -95,7 +95,7 @@
       right: 5px;
     }
 
-    .todo-item:hover .delete {
+    .todo-item:hover .controller.delete {
       visibility: visible;
     }
 
