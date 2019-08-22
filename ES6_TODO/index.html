@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TODO</title>
+  <style>
+    html {
+      font-family: "Helvetica Neue";
+      background-color: #f5f5f5;
+      box-sizing: border-box;
+    }
+
+    ul li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    * {
+      box-sizing: inherit;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .todo {
+      position: relative;
+      width: 600px;
+      margin: 130px auto;
+    }
+
+    .todo-header {
+      position: relative;
+    }
+
+    .todo-header .select-btn {
+      position: absolute;
+      top: 140px;
+      left: 20px;
+      font-size: 22px;
+      transform: rotate(90deg);
+    }
+
+    .todo-header h1 {
+      font-size: 100px;
+      font-weight: 200;
+      color: rgba(175, 47, 47, 0.15);
+      text-align: center;
+    }
+
+    /* 所有 input 框 */
+    .todo .edit {
+      padding: 16px 16px 16px 60px;
+      width: 100%;
+      font-size: 24px;
+    }
+
+    .todo-item {
+      position: relative;
+    }
+
+    .todo-item.completed span {
+      color: #d9d9d9;
+      text-decoration: line-through
+    }
+
+    .todo-item .controller {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: -35px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid;
+      border-radius: 100%;
+    }
+
+    .todo-item.completed .controller::before {
+      content: '✔️';
+      position: absolute;
+      top: 2px;
+      left: 7px;
+    }
+
+    .todo-item .controller.delete {
+      visibility: hidden;
+      left: auto;
+      right: 5px;
+    }
+
+    .todo-item:hover .delete {
+      visibility: visible;
+    }
+
+    .todo-item span {
+      display: inline-block;
+      background-color: #fff;
+      padding: 16px 16px 16px 24px;
+      width: 100%;
+      font-size: 24px;
+    }
+
+    /* 每个 item 的 input */
+    .todo-item .edit { 
+      position: absolute;
+      padding: 16px 16px 16px 24px;
+      top: 0;
+      left: 0;
+    }
+
+    .todo-footer {
+      font-size: 16px;
+    }
+
+    .todo-footer ul {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: absolute;
+      left: 114px;
+      bottom: -1px;
+    }
+
+    .todo-footer button {
+      font-size: 20px;
+    }
+
+    .todo-content li {
+      display: none;
+    }
+
+    .todo-content .show-all li {
+      display: block;
+    }
+
+    .todo-content .show-active li:not(.completed) {
+      display: block
+    }
+
+    .todo-content .show-completed li.completed {
+      display: block
+    }
+
+  </style>
+</head>
+
+<body>
+  <section class="todo">
+    <header class="todo-header">
+      <h1>todos</h1>
+      <span class="select-btn">❯</span>
+      <input class="edit" type="text" placeholder="what needs to be done?">
+    </header>
+    <section class="todo-content">
+      <ul class="show-all">
+      </ul>
+    </section>
+    <footer class="todo-footer">
+      <span class="count">0 items left</span>
+      <ul>
+        <li>
+          <button class="all">All</button>
+        </li>
+        <li>
+          <button class="active">Active</button>
+        </li>
+        <li>
+          <button class="completed">Completed</button>
+        </li>
+        <li>
+          <button class="clear-completed">Clear completed</button>
+        </li>
+      </ul>
+    </footer>
+  </section>
+
+  <script src="./todo.js"></script>
+  <script>
+    const tt = new Todo(document.querySelector('.todo'))
+    console.log(tt)
+  </script>
+</body>
+
+</html>
