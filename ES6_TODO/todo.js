@@ -39,7 +39,7 @@ class Todo {
       'data-id': item.id
     })
 
-    const checkbox = elt('div', 'controller')                 // 切换 item 状态按钮
+    const checkbox = elt('div', 'controller toggle')                 // 切换 item 状态按钮
 
     const deleteBtn = elt('button', 'controller delete', 'X') // 删除按钮
 
@@ -74,13 +74,13 @@ class Todo {
   }
 
   operateItem(e) {
-    const { parent, item } = this.getItem(e.target) // 获取父节点 li 和相对应的 item
+    const { parent, item } = this.getItem(e.target)          // 获取父节点 li 和相对应的 item
 
-    if (e.target.nodeName === 'DIV') {              // 切换 item 的状态
+    if (e.target.nodeName === 'DIV') {                       // 切换 item 的状态
       item.status = !item.status
       item.status ? parent.classList.add('completed') : parent.classList.remove('completed')
       item.status ? this.updateCount(this.activeLength--) :this.updateCount(this.activeLength++)
-    } else if (e.target.nodeName === 'BUTTON') {    // 删除 item
+    } else if (e.target.nodeName === 'BUTTON') {             // 删除 item
       const idx = this.items.indexOf(item)
       this.items.splice(idx, 1) 
       parent.remove()
@@ -90,8 +90,9 @@ class Todo {
 
   toggleAll() {
     if (this.items.length === 0) return;
-    this.items.forEach(it => {              // 修改数据
-      it.status = this.activeAll = !this.activeAll
+    this.activeAll = !this.activeAll        // 切换全选状态
+    this.items.forEach(it => {             
+      it.status = this.activeAll            // 更新每个 item 的状态
     })
     const list = this.contentBox.children
     for (let i = 0; i < list.length; i++) { // 根据 this.activeAll 的值修改 每一项 item 的 class
