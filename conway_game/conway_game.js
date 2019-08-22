@@ -11,28 +11,31 @@ class ConwayGame {
     this.hasBtn = opts.hasBtn || true
     this.autoPlay = opts.autoPlay || false
     this.duration = opts.duration || 500
-    
+
     this.hasBtn && this.createBtn()
     this.autoPlay ? this.startPlay(true) : this.startPlay()
     this.paintMap()
   }
 
   next() {
-    const copy = this.plain.slice() // 记录需要变动的格子方位(不改变原始格子)
-    for (let x = 0; x < this.height; x++) {
-      for (let y = 0; y < this.width; y++) {
-        const neighborNum = this.countNeighbor(x, y)
-        if (copy[x][y] === 0) { // 对死去的小格子
-          copy[x][y] = neighborNum === 3 ? 1 : 0 // 判断邻居数量是否为 3
-        } else if (copy[x][y] === 1) { // 对于活着的小格子
-          copy[x][y] = neighborNum > 3 || neighborNum < 2 ? 0 : 1 // 判断邻居数量是否大于 3 或小于 2(死亡)
+    const copy = this.plain.map(arr => arr.slice()) // 记录需要变动的格子方位(不改变原始格子)
+
+    for (let row = 0; row < this.height; row++) {
+      for (let col = 0; col < this.width; col++) {
+        const count = this.countNeighbor(row, col)
+        if (this.plain[row][col] === 1) {           // 对活着的小格子判断是否需要死亡
+          copy[row][col] = count === 2 || count === 3 ? 1 : 0
+        } else {                                    // 对死亡的小格子判断是否需要复活
+          copy[row][col] = count === 3 ? 1 : 0
         }
       }
-      this.plain = copy // 替换格子内容
-      this.paintMap()
-
     }
+
+    this.plain = copy // 替换格子内容
+    this.paintMap()
+
   }
+
 
   paintMap() {
     if (this.gameBoard.children.length !== 0) this.clear() // 如果已有子节点则清空
@@ -53,17 +56,17 @@ class ConwayGame {
     }
   }
 
-  countNeighbor(x, y) { // 计算邻居的数量, 左 右 上 下 斜对角 共 8 个方位
+  countNeighbor(row, col) { // 计算邻居的数量, 左 右 上 下 斜对角 共 8 个方位
     let count = 0
     const dirs = {
-      up: [x, y - 1],
-      down: [x, y + 1],
-      left: [x - 1, y],
-      leftUp: [x - 1, y - 1],
-      leftDown: [x - 1, y + 1],
-      right: [x + 1, y],
-      rightUp: [x + 1, y - 1],
-      rightDown: [x + 1, y + 1],
+      left: [row, col - 1],
+      leftUp: [row - 1, col - 1],
+      leftDown: [row + 1, col - 1],
+      up: [row - 1, col],
+      down: [row + 1, col],
+      right: [row, col + 1],
+      rightUp: [row - 1, col + 1],
+      rightDown: [row + 1, col + 1]
     }
 
     for (const dir in dirs) {
