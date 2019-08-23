@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>snake</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    .board {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      outline: 1px solid;
+    }
+
+    .background {
+      border-spacing: 1px;
+    }
+
+    .cell {
+      width: 20px;
+      height: 20px;
+      background: #ccc;
+    }
+
+    .snake-body {
+      background: greenyellow;
+    }
+
+    .snake-head {
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 15px solid red;
+    }
+
+    .snake-head.left {
+      transform: rotate(-90deg);
+    }
+
+    .snake-head.right {
+      transform: rotate(90deg);
+    }
+
+    .snake-head.down {
+      transform: rotate(180deg);
+    }
+
+    .apple {
+      background: gold;
+    }
+
+  </style>
+</head>
+
+<body>
+  <section class="board">
+  </section>
+
+
+  <script src="./index.js"></script>
+  <script>
+    const wrap = document.querySelector('.board')
+    const opts = {
+      width: 30,
+      height: 30,
+      cellSize: 20,
+    }
+
+    const game = new Snake(wrap, opts)
+
+    function auto() {
+      window.timer = setInterval(() => {
+        if (game.next() === 'end') {
+          clearInterval(window.timer)
+          removeEventListener('keydown', run)
+        }
+      }, 300)
+    }
+    auto()
+
+    function go(dir) {
+      clearInterval(window.timer)
+      if (game.next(dir) === 'end') {}
+      auto()
+    }
+
+    
+    addEventListener('keydown', run) // TODO 为点击事件做 防抖
+
+    function run(e) {
+      let isEnd;
+      switch (e.key) {
+        case 'ArrowUp':
+          isEnd = go('up')
+          break;
+
+        case 'ArrowLeft':
+          isEnd = go('left')
+          break;
+
+        case 'ArrowRight':
+          isEnd = go('right')
+          break;
+
+        case 'ArrowDown':
+          isEnd = go('down')
+          break;
+      }
+      if (isEnd === 'end') {
+        alert('游戏结束')
+        removeEventListener('keydown', run)
+      }
+    }
+
+  </script>
+</body>
+
+</html>
