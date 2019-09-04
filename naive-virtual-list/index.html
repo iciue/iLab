@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>simple virtual list</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .list-view {
+      position: relative;
+      height: 500px;
+      border: 1px solid;
+      overflow-y: scroll;
+    }
+
+    .list-view-content {
+      position: relative;
+      top: 0;
+      left: 0;
+      outline: 1px solid red;
+    }
+
+    .list-view-item {
+      position: absolute;
+      box-sizing: border-box;
+      height: 30px;
+      width: 100%;
+      border: 1px solid;
+      padding: 3px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <h1>title</h1>
+  <div class="list-view">
+    <ul class="list-view-content">
+
+    </ul>
+  </div>
+
+  <script src="./naive-virtual-list.js"></script>
+  <script>
+    const view = document.querySelector('.list-view')
+    const t = new VirtualList(view, {
+      data: fakeItems()
+    })
+    console.log(t);
+
+
+    function fakeItems() {
+      const arr = []
+      for (let i = 0; i < 10000; i++) {
+        arr.push(i + 1)
+      }
+      return arr
+    }
+
+  </script>
+</body>
+
+</html>
