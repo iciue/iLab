@@ -23,14 +23,16 @@ class Todo {
 
 
   addItem(e) {
+    const  value = e.target.value.trim() // 去除首尾空格
+    if (!value.length) return            // 输入了空字符串直接 return
     const item = {
-      value: e.target.value,
-      status: false,                 // false 表示 item 未完成(active). true 表示 item 已完成(completed)
-      id: ~~(Math.random() * 100000) // 标识 item
+      value,
+      status: false,                     // false 表示 item 未完成(active). true 表示 item 已完成(completed)
+      id: ~~(Math.random() * 100000)     // 标识 item
     }
     e.target.value = ''
-    this.items.push(item)            // 操作数据
-    this.addDOMItem(item)            // 操作 DOM
+    this.items.push(item)                // 操作数据
+    this.addDOMItem(item)                // 操作 DOM
     this.updateCount(this.activeLength++)
   }
 
@@ -41,7 +43,7 @@ class Todo {
 
     const checkbox = elt('div', 'controller toggle')                 // 切换 item 状态按钮
 
-    const deleteBtn = elt('button', 'controller delete', 'X') // 删除按钮
+    const deleteBtn = elt('button', 'controller delete', 'X')        // 删除按钮
 
     const span = elt('span', '', item.value)
 
@@ -65,7 +67,8 @@ class Todo {
   }
 
   changeItem(parent, item, e) {                         // 修改对应 item 的数据, 更新 span 标签的内容
-    const newVal = e.target.value
+    const newVal = e.target.value.trim()                //  去除首尾空格
+    if (newVal.length === 0)  { this.remove(parent, item)}                       // 删除节点
     if (newVal !== item.value) {
       item.value = newVal                               // 更新数据
       parent.querySelector('span').textContent = newVal // 更新 span 标签的内容为更新后的 item 值
@@ -81,11 +84,15 @@ class Todo {
       item.status ? parent.classList.add('completed') : parent.classList.remove('completed')
       item.status ? this.updateCount(this.activeLength--) :this.updateCount(this.activeLength++)
     } else if (e.target.nodeName === 'BUTTON') {             // 删除 item
-      const idx = this.items.indexOf(item)
-      this.items.splice(idx, 1) 
-      parent.remove()
-      if(!item.status) this.updateCount(this.activeLength--) // 更新 item left 值
+      this.remove(parent, item)
     }
+  }
+
+  remove(parent, item) {                                   // 删除节点
+    const idx = this.items.indexOf(item)
+    this.items.splice(idx, 1) 
+    parent.remove()
+    if(!item.status) this.updateCount(this.activeLength--) // 更新 item left 值
   }
 
   toggleAll() {
