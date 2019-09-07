@@ -1,3 +1,4 @@
+// TODO 对点击事件添加节流
 class Swiper {
   constructor(elt, opts) {
     this.elt = elt
@@ -6,27 +7,28 @@ class Swiper {
     this.index = 1
     this.hasBtn = opts.hasBtn || true
     this.hasIndicators = opts.hasIndicators || true
-    this.autoPlay = opts.autoPlay || false
+    // this.autoPlay = opts.autoPlay || false
+    this.autoPlay = false
     this.duration = opts.duration || 1000
     this.init()
   }
 
-  init() {                    // 绘制按钮以及绑定事件
-    this.copyFirstAndLast()   // 拷贝首/尾节点, 并插入到容器的首/尾
+  init() { // 绘制按钮以及绑定事件
+    this.copyFirstAndLast() // 拷贝首/尾节点, 并插入到容器的首/尾
 
-    if (this.hasBtn) {        // 绘制左右箭头并绑定时间
+    if (this.hasBtn) { // 绘制左右箭头并绑定时间
       this.createBtnAndBindEvent()
     }
-    if (this.hasIndicators) { 
+    if (this.hasIndicators) {
       this.indicators = []
       this.createIndicators() // 绘制小圆点
-      this.changeIndicator()  // 初始化小圆点
+      this.changeIndicator() // 初始化小圆点
     }
-    // if (this.autoPlay) {      // 设置自动播放
-    //   this.timer = this.setAutoPlay()
-    //   this.elt.addEventListener('mouseenter', () => clearInterval(this.timer))            // 悬停时删除自动播放定时器
-    //   this.elt.addEventListener('mouseleave', this.setAutoPlay.bind(this))                // 离开容器时添加自动播放定时器
-    // }
+    if (this.autoPlay) { // 设置自动播放
+      this.timer = this.setAutoPlay()
+      this.elt.addEventListener('mouseenter', () => clearInterval(this.timer)) // 悬停时删除自动播放定时器
+      this.elt.addEventListener('mouseleave', this.setAutoPlay.bind(this)) // 离开容器时添加自动播放定时器
+    }
   }
 
   copyFirstAndLast() {
@@ -64,16 +66,21 @@ class Swiper {
     this.wrap.style.transform = `translateX(-${offset}00%)`
     this.wrap.style.transitionDuration = this.duration + 'ms'
     this.changeIndicator()
-
+    
     if (this.index === 6 || this.index === 0) {
       this.index = goNext ? 1 : 5
       this.changeIndicator()
-      setTimeout(() => {
-        this.wrap.style.transitionDuration = '0ms'
-        this.wrap.style.transform = `translateX(-${this.index}00%)`
-      }, 1000);
+      const startTime = Date.now()
+      const ani =() => {
+        if (Date.now() - startTime >= this.duration) {
+          this.wrap.style.transitionDuration = '0ms'
+          this.wrap.style.transform = `translateX(-${this.index}00%)`
+        } else {
+          requestAnimationFrame(ani)
+        }
+      }
+      ani()
     }
-
   }
 
   indicatorsHandler(e) {
