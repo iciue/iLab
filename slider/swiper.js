@@ -1,4 +1,4 @@
-// TODO 对点击事件添加节流
+// ~~TODO 对点击事件添加节流~~
 class Swiper {
   constructor(elt, opts) {
     this.elt = elt
@@ -7,27 +7,26 @@ class Swiper {
     this.index = 1
     this.hasBtn = opts.hasBtn || true
     this.hasIndicators = opts.hasIndicators || true
-    // this.autoPlay = opts.autoPlay || false
-    this.autoPlay = false
-    this.duration = opts.duration || 1000
+    this.autoPlay = opts.autoPlay || false
+    this.duration = opts.duration || 800
     this.init()
   }
 
-  init() { // 绘制按钮以及绑定事件
-    this.copyFirstAndLast() // 拷贝首/尾节点, 并插入到容器的首/尾
+  init() {                    // 绘制按钮以及绑定事件
+    this.copyFirstAndLast()   // 拷贝首/尾节点, 并插入到容器的首/尾
 
-    if (this.hasBtn) { // 绘制左右箭头并绑定时间
+    if (this.hasBtn) {        // 绘制左右箭头并绑定事件
       this.createBtnAndBindEvent()
     }
     if (this.hasIndicators) {
       this.indicators = []
       this.createIndicators() // 绘制小圆点
-      this.changeIndicator() // 初始化小圆点
+      this.changeIndicator()  // 初始化小圆点
     }
-    if (this.autoPlay) { // 设置自动播放
+    if (this.autoPlay) {      // 设置自动播放
       this.timer = this.setAutoPlay()
-      this.elt.addEventListener('mouseenter', () => clearInterval(this.timer)) // 悬停时删除自动播放定时器
-      this.elt.addEventListener('mouseleave', this.setAutoPlay.bind(this)) // 离开容器时添加自动播放定时器
+      this.elt.addEventListener('mouseenter', () => clearInterval(this.timer))       // 悬停时停止自动播放
+      this.elt.addEventListener('mouseleave', () => this.timer = this.setAutoPlay()) // 离开容器自动播放
     }
   }
 
@@ -55,8 +54,9 @@ class Swiper {
   createBtnAndBindEvent() {
     const next = this.elt.appendChild(elt('span', 'slider-btn next', '>'))
     const prev = this.elt.appendChild(elt('span', 'slider-btn prev', '<'))
-    next.addEventListener('click', this.sliderHandler.bind(this))
-    prev.addEventListener('click', this.sliderHandler.bind(this))
+    const cb = throttle(this.sliderHandler.bind(this), this.duration)
+    next.addEventListener('click', cb)
+    prev.addEventListener('click', cb)
   }
 
   sliderHandler(e) {
@@ -66,12 +66,12 @@ class Swiper {
     this.wrap.style.transform = `translateX(-${offset}00%)`
     this.wrap.style.transitionDuration = this.duration + 'ms'
     this.changeIndicator()
-    
+
     if (this.index === 6 || this.index === 0) {
       this.index = goNext ? 1 : 5
       this.changeIndicator()
       const startTime = Date.now()
-      const ani =() => {
+      const ani = () => {
         if (Date.now() - startTime >= this.duration) {
           this.wrap.style.transitionDuration = '0ms'
           this.wrap.style.transform = `translateX(-${this.index}00%)`
@@ -111,4 +111,18 @@ function elt(tagName, className, textCon) {
   el.className = className
   el.textContent = textCon
   return el
+}
+
+function throttle(func, delay) {
+  let prevTime = null
+  return function () {
+    const now = Date.now()
+    if (!prevTime || now - prevTime >= delay) {
+      console.log('大于' + delay)
+      prevTime = now
+      func()
+    } else {
+      console.log('小于延迟, 不执行操作')
+    }
+  }
 }
