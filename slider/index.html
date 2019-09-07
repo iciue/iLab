@@ -36,6 +36,7 @@
       opacity: .5;
       top: 50%;
       transform: translateY(-50%);
+      user-select: none;
     }
 
     .slider-btn.next {
@@ -102,7 +103,7 @@
     var t = new Swiper(div, {
       buttons: true,
       indicators: true,
-      autoPlay: false,
+      autoPlay: true,
     })
 
     console.dir(t)
