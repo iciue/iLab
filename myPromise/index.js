@@ -7,6 +7,7 @@
  *  4. all ✔️
  *  5. race ✔️
  *  6. finally ✔️
+ *  7, catch ✔️
  */
 
 const STATUS = {
@@ -34,8 +35,8 @@ class MyPromise {
   }
 
   then(fulfilledHandler, rejectedHandler) {
-    typeof fulfilledHandler === 'function' || (fulfilledHandler =  v => v)
-    typeof rejectedHandler === 'function' || (rejectedHandler =  (e) => { throw e })
+    typeof fulfilledHandler === 'function' || (fulfilledHandler = v => v)
+    typeof rejectedHandler === 'function' || (rejectedHandler = (e) => { throw e })
 
     if (this.status === STATUS.PENDING) {
       return new MyPromise((resolve, reject) => {
@@ -98,9 +99,13 @@ class MyPromise {
     this.rejectedCallbacks.forEach(cb => setTimeout(() => cb(), 0))
   }
 
+  catch(rejectedHandler) {
+    return this.then(undefined, rejectedHandler)
+  }
+
 }
 
-MyPromise.prototype.all = function(args) {
+MyPromise.prototype.all = function (args) {
   return new MyPromise((resolve, reject) => {
     const max = args.length
     const ret = []
@@ -109,13 +114,13 @@ MyPromise.prototype.all = function(args) {
     for (const p of args) {
       p.then(res => {
         ret.push(res)
-        ++count === max && resolve(ret)
+          ++count === max && resolve(ret)
       })
     }
   })
 }
 
-MyPromise.prototype.race = function(args) {
+MyPromise.prototype.race = function (args) {
   return new MyPromise((resolve, reject) => {
     for (const p of args) {
       p.then(res => resolve(res)).catch(reject)
@@ -123,7 +128,7 @@ MyPromise.prototype.race = function(args) {
   })
 }
 
-MyPromise.prototype.finally = function(func) {
+MyPromise.prototype.finally = function (func) {
   this.resolvedCallbacks.push(func)
   this.rejectedCallbacks.push(func)
 }
@@ -132,8 +137,8 @@ MyPromise.prototype.finally = function(func) {
 new MyPromise((resolve, reject) => {
     console.log(`hi`);
     setTimeout(() => {
-      resolve(1)
-      // reject(222)
+      // resolve(1)
+      reject(222)
     }, 500);
   })
   .then(v => {
@@ -142,9 +147,9 @@ new MyPromise((resolve, reject) => {
     return v
   })
   .then(console.log)
-// .catch(console.log)
-// .then(console.log, console.log)
-// .finally(r => {
-//   console.log('finally');
-//   console.log(r);
-// })
+  .catch(console.log)
+  .then(console.log, console.log)
+  .finally(r => {
+    console.log('finally');
+    console.log(r);
+  })
