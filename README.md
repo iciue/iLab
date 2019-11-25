@@ -8,3 +8,5 @@ Conway's Game of Life ([源码](./conway_game/) || [预览](https://iciue.github
 贪吃蛇 ([源码](./snake/) || [预览](https://iciue.github.io/iLab/snake/))
 
 原生 JS 实现轮播图 ([轮播图](./slider) || [预览](https://iciue.github.io/iLab/slider/))
+
+虚拟列表 ([源码](./naive-virtual-list) || [预览](https://iciue.github.io/iLab/naive-virtual-list/))
